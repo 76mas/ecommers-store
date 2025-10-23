@@ -7,15 +7,11 @@ import axios from "axios";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { Button, Input, Space, Spin } from "antd";
-import { use, useState } from "react";
+import { useState } from "react";
 import { useOrder } from "@/app/context/order";
 import Order from "../order/page";
 const Checkout = () => {
-  let orders;
-  useEffect(() => {
-    orders = localStorage?.getItem("cart") || "[]";
-  }, []);
-
+  let orders = localStorage?.getItem("cart") || "[]";
   const { orderDetails, setOrderDetailse } = useOrder();
   const order = JSON.parse(orders);
   const [loaing, setLoading] = useState(false);

@@ -8,7 +8,6 @@ import { use, useState } from "react";
 import Done from "@/app/components/ss";
 import { Button, Spin } from "antd";
 import { useOrder } from "@/app/context/order";
-import { o } from "framer-motion/dist/types.d-Cjd591yU";
 
 const Order = () => {
   const navgation = useRouter();

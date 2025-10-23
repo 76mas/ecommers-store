@@ -14,18 +14,6 @@ export default function ProductsBanner() {
   const navgation = useRouter();
 
   useEffect(() => {
-    // axios
-    //   .get(`http://161.97.169.6:4000/banner/${id}`)
-    //   .then((res) => {
-    //     setProducts(
-    //       res.data.filter((item) => {
-    //       return  item.active;
-    //       })
-    //     );
-    //     console.log("res.data", res.data);
-    //   })
-    //   .catch((err) => console.log(err));
-
     featchBanner();
   }, [id]);
 
