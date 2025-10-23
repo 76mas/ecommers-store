@@ -9,7 +9,7 @@ export default function Home() {
     if (localStorage.getItem("token")) {
       navgation.push("/home");
     }
-  });
+  }, []);
 
   const [step, setStep] = useState(0);
   const [next, setNext] = useState(false);

@@ -4,23 +4,19 @@ import Container from "@/app/components/container";
 import { FaChevronLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { use, useState } from "react";
+import { useEffect, useState } from "react";
 import Done from "@/app/components/ss";
 import { Button, Spin } from "antd";
 import { useOrder } from "@/app/context/order";
 
 const Order = () => {
   const navgation = useRouter();
-  let orders;
-  useEffect(() => {
-    orders = localStorage?.getItem("cart");
-  }, []);
+ 
+  const [order, setOrder] = useState([]);
 
-  const order = JSON.parse(orders);
   const { orderDetails, setOrderDetailse } = useOrder();
   const [sentData, setSentData] = useState(false);
   const [loaing, setLoading] = useState(false);
-  // console.log("order", order);
 
   const [addressInfo, setAddressInfo] = useState({
     phone: "",
@@ -28,6 +24,11 @@ const Order = () => {
     city: "",
     cuntry: "",
   });
+
+  useEffect(() => {
+  
+    setOrder(JSON.parse(localStorage.getItem("cart")));
+  }, []);
 
   function handelSumPrice(orders) {
     let sum = 0;
@@ -68,7 +69,6 @@ const Order = () => {
       address: `${addressInfo.address} ${addressInfo.city} ${addressInfo.cuntry}`,
     };
     console.log("finsalorder", finalorder);
-    // setOrderDetailse({ ...orderDetails, ...finalorder });
     setLoading(true);
     try {
       const respose = await axios.post(

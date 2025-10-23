@@ -28,13 +28,6 @@ export default function ProductsBanner() {
     }
   };
 
-  //   useEffect(() => {
-  //     axios
-  //       .get(`http://161.97.169.6:4000/banner/${id}`)
-  //       .then((res) => setCategory(res.data))
-  //       .catch((err) => console.log(err));
-  //   }, [id]);
-
   console.log("products", products);
 
   return (
@@ -66,7 +59,6 @@ export default function ProductsBanner() {
                     <div className="w-full overflow-hidden rounded-xl bg-gray-100">
                       <img
                         className="w-full h-auto"
-                        // src={`http://161.97.169.6:4000/${product.images[0]?.link}`}
                         src={
                           product.images[0]?.link.includes("https")
                             ? `${product.images[0]?.link}`

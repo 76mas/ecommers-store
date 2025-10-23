@@ -38,7 +38,6 @@ const Hero = () => {
 
   const GetData = async () => {
     try {
-      // const products = await axios.get("http://161.97.169.6:4000/product");
 
       const products = await axios.get("http://161.97.169.6:4000/product", {
         params: { page: 1, limit: 1000 },
@@ -63,7 +62,6 @@ const Hero = () => {
 
   const Timer = ({ banner }) => {
     const [timeLeft, setTimeLeft] = useState("");
-    // const category_detailes = banner.category_detailes;
 
     const deletBanner = async () => {
       try {

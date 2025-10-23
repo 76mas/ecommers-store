@@ -7,13 +7,15 @@ import axios from "axios";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { Button, Input, Space, Spin } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOrder } from "@/app/context/order";
 import Order from "../order/page";
 const Checkout = () => {
-  let orders = localStorage?.getItem("cart") || "[]";
-  const { orderDetails, setOrderDetailse } = useOrder();
-  const order = JSON.parse(orders);
+  // let orders = localStorage?.getItem("cart") || "[]";
+  // const { orderDetails, setOrderDetailse } = useOrder();
+  const [orders, setOrders] = useState([]);
+
+  const [order, setOrder] = useState([]);
   const [loaing, setLoading] = useState(false);
   const [voucher, setVoucher] = useState(null);
   const [go, setGo] = useState(true);
@@ -22,6 +24,12 @@ const Checkout = () => {
   const [applay, setApplay] = useState(false);
   const [totallPrice, setTotalPrice] = useState(0);
   const [coupon, setCoupon] = useState("");
+
+  useEffect(() => {
+    // setOrders(localStorage.getItem("cart"));
+    //  const order = JSON.parse(orders);
+    setOrder(JSON.parse(localStorage.getItem("cart")));
+  }, []);
 
   console.log("order", order);
 
