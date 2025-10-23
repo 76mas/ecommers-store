@@ -4,14 +4,19 @@ import Container from "@/app/components/container";
 import { FaChevronLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { useState } from "react";
+import { use, useState } from "react";
 import Done from "@/app/components/ss";
 import { Button, Spin } from "antd";
 import { useOrder } from "@/app/context/order";
+import { o } from "framer-motion/dist/types.d-Cjd591yU";
 
 const Order = () => {
   const navgation = useRouter();
-  const orders = localStorage?.getItem("cart");
+  let orders;
+  useEffect(() => {
+    orders = localStorage?.getItem("cart");
+  }, []);
+
   const order = JSON.parse(orders);
   const { orderDetails, setOrderDetailse } = useOrder();
   const [sentData, setSentData] = useState(false);
@@ -205,7 +210,6 @@ const Order = () => {
                   />
                 </div>
 
-         
                 <Button
                   onClick={handelDelevery}
                   className="custom-btn"

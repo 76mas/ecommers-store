@@ -7,15 +7,19 @@ import axios from "axios";
 import { IoLocationOutline } from "react-icons/io5";
 import { FaRegEdit } from "react-icons/fa";
 import { Button, Input, Space, Spin } from "antd";
-import { useState } from "react";
+import { use, useState } from "react";
 import { useOrder } from "@/app/context/order";
 import Order from "../order/page";
 const Checkout = () => {
-  let orders = localStorage?.getItem("cart") || "[]";
+  let orders;
+  useEffect(() => {
+    orders = localStorage?.getItem("cart") || "[]";
+  }, []);
+
   const { orderDetails, setOrderDetailse } = useOrder();
   const order = JSON.parse(orders);
   const [loaing, setLoading] = useState(false);
-  const [voucher,setVoucher] = useState(null);
+  const [voucher, setVoucher] = useState(null);
   const [go, setGo] = useState(true);
   const [discount, setDiscount] = useState(0);
   const [persnateValue, setPersnateValue] = useState(0);
@@ -28,7 +32,6 @@ const Checkout = () => {
   function handelSumPrice(orders) {
     let sum = 0;
 
-   
     for (let i = 0; i < orders?.length; i++) {
       if (orders[i].endpricedate >= new Date().toISOString().split("T")[0]) {
         sum += orders[i].endprice * orders[i].quantity;
