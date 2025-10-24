@@ -11,7 +11,7 @@ import { useOrder } from "@/app/context/order";
 
 const Order = () => {
   const navgation = useRouter();
- 
+
   const [order, setOrder] = useState([]);
 
   const { orderDetails, setOrderDetailse } = useOrder();
@@ -26,7 +26,6 @@ const Order = () => {
   });
 
   useEffect(() => {
-  
     setOrder(JSON.parse(localStorage.getItem("cart")));
   }, []);
 
@@ -72,7 +71,7 @@ const Order = () => {
     setLoading(true);
     try {
       const respose = await axios.post(
-        "http://161.97.169.6:4000/order",
+        "https://161.97.169.6:4000/order",
         finalorder,
 
         {

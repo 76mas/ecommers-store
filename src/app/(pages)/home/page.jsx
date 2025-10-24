@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef ,useCallback} from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -38,11 +38,10 @@ const Hero = () => {
 
   const GetData = async () => {
     try {
-
-      const products = await axios.get("http://161.97.169.6:4000/product", {
+      const products = await axios.get("https://161.97.169.6:4000/product", {
         params: { page: 1, limit: 1000 },
       });
-      const response = await axios.get("http://161.97.169.6:4000/banner");
+      const response = await axios.get("https://161.97.169.6:4000/banner");
 
       // ترتيب البنرات حسب priority
       const sortedBanners = response.data.sort(
@@ -66,7 +65,7 @@ const Hero = () => {
     const deletBanner = async () => {
       try {
         axios
-          .delete(`http://161.97.169.6:4000/banner/${banner.id}`)
+          .delete(`https://161.97.169.6:4000/banner/${banner.id}`)
           .then((res) => {
             console.log("res", res.data);
           })
@@ -260,138 +259,143 @@ const Hero = () => {
     );
   };
 
-const Banner = ({ banner }) => {
-  const trackRef = useRef(null);
-  const containerRef = useRef(null);
-  const animationRef = useRef(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [startX, setStartX] = useState(0);
-  const [currentTranslate, setCurrentTranslate] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
+  const Banner = ({ banner }) => {
+    const trackRef = useRef(null);
+    const containerRef = useRef(null);
+    const animationRef = useRef(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [startX, setStartX] = useState(0);
+    const [currentTranslate, setCurrentTranslate] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragOffset, setDragOffset] = useState(0);
 
-  const slides = banner?.map || [];
+    const slides = banner?.map || [];
 
-  const getContainerWidth = useCallback(() => {
-    return containerRef.current?.offsetWidth || 0;
-  }, []);
+    const getContainerWidth = useCallback(() => {
+      return containerRef.current?.offsetWidth || 0;
+    }, []);
 
-  const updateTransform = useCallback((translate, animate = true) => {
-    if (!trackRef.current) return;
-    
-    if (animate) {
-      trackRef.current.style.transition = 'transform 500ms ease-in-out';
-    } else {
-      trackRef.current.style.transition = 'none';
-    }
-    trackRef.current.style.transform = `translateX(${translate}px)`;
-  }, []);
+    const updateTransform = useCallback((translate, animate = true) => {
+      if (!trackRef.current) return;
 
-  useEffect(() => {
-    const newTranslate = -currentIndex * getContainerWidth();
-    setCurrentTranslate(newTranslate);
-    updateTransform(newTranslate, true);
-  }, [currentIndex, getContainerWidth, updateTransform]);
+      if (animate) {
+        trackRef.current.style.transition = "transform 500ms ease-in-out";
+      } else {
+        trackRef.current.style.transition = "none";
+      }
+      trackRef.current.style.transform = `translateX(${translate}px)`;
+    }, []);
 
-  const touchStart = useCallback((e) => {
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    setStartX(clientX);
-    setIsDragging(true);
-    setDragOffset(0);
-    
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-    }
-  }, []);
+    useEffect(() => {
+      const newTranslate = -currentIndex * getContainerWidth();
+      setCurrentTranslate(newTranslate);
+      updateTransform(newTranslate, true);
+    }, [currentIndex, getContainerWidth, updateTransform]);
 
-  const touchMove = useCallback((e) => {
-    if (!isDragging) return;
-    
-    e.preventDefault();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const diff = clientX - startX;
-    setDragOffset(diff);
-    
-    animationRef.current = requestAnimationFrame(() => {
-      updateTransform(currentTranslate + diff, false);
-    });
-  }, [isDragging, startX, currentTranslate, updateTransform]);
+    const touchStart = useCallback((e) => {
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      setStartX(clientX);
+      setIsDragging(true);
+      setDragOffset(0);
 
-  const touchEnd = useCallback(() => {
-    if (!isDragging) return;
-    
-    setIsDragging(false);
-    const threshold = getContainerWidth() * 0.15;
-    
-    let newIndex = currentIndex;
-    
-    if (dragOffset < -threshold && currentIndex < slides.length - 1) {
-      newIndex = currentIndex + 1;
-    } else if (dragOffset > threshold && currentIndex > 0) {
-      newIndex = currentIndex - 1;
-    }
-    
-    setCurrentIndex(newIndex);
-  }, [isDragging, dragOffset, currentIndex, slides.length, getContainerWidth]);
-
-  useEffect(() => {
-    return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-    };
-  }, []);
+    }, []);
 
-  if (!slides.length) return null;
+    const touchMove = useCallback(
+      (e) => {
+        if (!isDragging) return;
 
-  return (
-    <Container>
-      <div 
-        ref={containerRef}
-        className="relative shadow-xl rounded-2xl w-full h-[250px] mt-10 flex justify-center items-center overflow-hidden select-none touch-pan-y"
-        onMouseDown={touchStart}
-        onMouseMove={touchMove}
-        onMouseUp={touchEnd}
-        onMouseLeave={touchEnd}
-        onTouchStart={touchStart}
-        onTouchMove={touchMove}
-        onTouchEnd={touchEnd}
-      >
-        <div 
-          className="flex will-change-transform"
-          ref={trackRef}
+        e.preventDefault();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const diff = clientX - startX;
+        setDragOffset(diff);
+
+        animationRef.current = requestAnimationFrame(() => {
+          updateTransform(currentTranslate + diff, false);
+        });
+      },
+      [isDragging, startX, currentTranslate, updateTransform]
+    );
+
+    const touchEnd = useCallback(() => {
+      if (!isDragging) return;
+
+      setIsDragging(false);
+      const threshold = getContainerWidth() * 0.15;
+
+      let newIndex = currentIndex;
+
+      if (dragOffset < -threshold && currentIndex < slides.length - 1) {
+        newIndex = currentIndex + 1;
+      } else if (dragOffset > threshold && currentIndex > 0) {
+        newIndex = currentIndex - 1;
+      }
+
+      setCurrentIndex(newIndex);
+    }, [
+      isDragging,
+      dragOffset,
+      currentIndex,
+      slides.length,
+      getContainerWidth,
+    ]);
+
+    useEffect(() => {
+      return () => {
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+      };
+    }, []);
+
+    if (!slides.length) return null;
+
+    return (
+      <Container>
+        <div
+          ref={containerRef}
+          className="relative shadow-xl rounded-2xl w-full h-[250px] mt-10 flex justify-center items-center overflow-hidden select-none touch-pan-y"
+          onMouseDown={touchStart}
+          onMouseMove={touchMove}
+          onMouseUp={touchEnd}
+          onMouseLeave={touchEnd}
+          onTouchStart={touchStart}
+          onTouchMove={touchMove}
+          onTouchEnd={touchEnd}
         >
-          {slides.map((item, index) => (
-            <div 
-              key={item.id || index}
-              className="min-w-full flex flex-col relative h-[250px] rounded-2xl overflow-hidden items-center"
-            >
-              <img 
-                onClick={() => navgation.push(`/banner/${item.id}`)}
-                className="w-full active:scale-[1.1] transition-all cursor-pointer h-full object-cover"
-                src={item.background}
-                alt="slide"
-                draggable="false"
-                loading={index === 0 ? "eager" : "lazy"}
+          <div className="flex will-change-transform" ref={trackRef}>
+            {slides.map((item, index) => (
+              <div
+                key={item.id || index}
+                className="min-w-full flex flex-col relative h-[250px] rounded-2xl overflow-hidden items-center"
+              >
+                <img
+                  onClick={() => navgation.push(`/banner/${item.id}`)}
+                  className="w-full active:scale-[1.1] transition-all cursor-pointer h-full object-cover"
+                  src={item.background}
+                  alt="slide"
+                  draggable="false"
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="absolute bottom-3 flex justify-center items-center gap-2 w-full">
+            {slides.map((_, i) => (
+              <div
+                key={i}
+                className={`w-[12px] h-[12px] rounded-full transition-colors duration-300 ${
+                  i === currentIndex ? "bg-[#fea1b0]" : "bg-[#DEDBDB]"
+                }`}
               />
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        <div className="absolute bottom-3 flex justify-center items-center gap-2 w-full">
-          {slides.map((_, i) => (
-            <div 
-              key={i}
-              className={`w-[12px] h-[12px] rounded-full transition-colors duration-300 ${
-                i === currentIndex ? "bg-[#fea1b0]" : "bg-[#DEDBDB]"
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-    </Container>
-  );
-};
-
+      </Container>
+    );
+  };
 
   const Category = ({ banner }) => {
     let categories = banner.category_detailes;

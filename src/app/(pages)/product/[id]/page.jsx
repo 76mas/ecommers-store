@@ -43,7 +43,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get(`http://161.97.169.6:4000/product/${id}`)
+      .get(`https://161.97.169.6:4000/product/${id}`)
       .then((res) => {
         setProduct(res.data);
 
@@ -80,7 +80,7 @@ export default function Products() {
   useEffect(() => {
     console.log("product", product);
     console.log("options", options);
-    axios.get(`http://161.97.169.6:4000/product`).then((res) => {
+    axios.get(`https://161.97.169.6:4000/product`).then((res) => {
       console.log(" res.data", res.data);
       setReletadeProduct(
         res.data.products
@@ -138,7 +138,7 @@ export default function Products() {
               src={
                 product.images[0]?.link.includes("https")
                   ? `${product.images[0]?.link}`
-                  : `http://161.97.169.6:4000/${product.images[0]?.link}`
+                  : `https://161.97.169.6:4000/${product.images[0]?.link}`
               }
               alt="product1"
             />

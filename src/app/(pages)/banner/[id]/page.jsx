@@ -19,7 +19,7 @@ export default function ProductsBanner() {
 
   const featchBanner = async () => {
     try {
-      const res = await axios.get(`http://161.97.169.6:4000/banner/${id}`);
+      const res = await axios.get(`https://161.97.169.6:4000/banner/${id}`);
       //   console.log("category", res.data);
       setBanner(res.data);
       setProducts(res.data.map);
@@ -62,7 +62,7 @@ export default function ProductsBanner() {
                         src={
                           product.images[0]?.link.includes("https")
                             ? `${product.images[0]?.link}`
-                            : `http://161.97.169.6:4000/${product.images[0]?.link}`
+                            : `https://161.97.169.6:4000/${product.images[0]?.link}`
                         }
                         alt={product.name || "product"}
                       />
