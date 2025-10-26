@@ -12,7 +12,7 @@ import { useOrder } from "@/app/context/order";
 import Order from "../order/page";
 const Checkout = () => {
   // let orders = localStorage?.getItem("cart") || "[]";
-  // const { orderDetails, setOrderDetailse } = useOrder();
+  const { orderDetails, setOrderDetailse } = useOrder();
   const [orders, setOrders] = useState([]);
 
   const [order, setOrder] = useState([]);
