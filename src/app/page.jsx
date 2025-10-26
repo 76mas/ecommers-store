@@ -43,7 +43,7 @@ export default function Home() {
         {!next ? (
           <>
             {" "}
-            <div className="background flex min-h-[100vh] justify-center items-end   w-full h-full">
+            <div className="background  flex min-h-[100vh] justify-center items-end   w-full h-full">
               <div className="w-full bg-gradient-to-t from-[#00000086] via-[#000000ac] to-transparent flex justify-center p-[43px] h-full">
                 <Container>
                   <div className="w-full  h-full flex flex-col gap-[35px] items-end">

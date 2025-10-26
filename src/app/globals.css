@@ -5,6 +5,12 @@
   --foreground: #171717;
 }
 
+* {
+
+  /* font-family: cairo; */
+    font-family: Cairo;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

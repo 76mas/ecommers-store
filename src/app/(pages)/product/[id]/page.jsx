@@ -12,16 +12,17 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { color } from "framer-motion";
 import { useOrder } from "@/app/context/order";
+import { Flex, Rate } from "antd";
 
 function formatWithCommas(value) {
   if (value === null || value === undefined) return "";
   const s = String(value).trim();
-  // إذا كان فيه جزء عشري
+
   const [intPart, decPart] = s.split(".");
-  // احتفظ بعلامة السالب
+
   const sign = intPart.startsWith("-") ? "-" : "";
   const absInt = intPart.replace("-", "");
-  // نضيف الفواصل كل 3 خانات من اليمين
+
   const formattedInt = absInt.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return sign + formattedInt + (decPart ? "." + decPart : "");
 }
@@ -35,15 +36,21 @@ export default function Products() {
     color: "",
     size: "",
   });
-  const router = useRouter();
+  const [value, setValue] = useState(0);
+  const [value2, setValue2] = useState(0);
+  const [ratingsCount, setRatingsCount] = useState(0);
+  const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 
+  const router = useRouter();
+  const [showRate, setShowRate] = useState(false); // للتحكم بظهور واجهة التقييم
+  // const averageRating = 3.8;
   const [reletadeProduct, setReletadeProduct] = useState([]);
 
   const { id } = useParams();
 
   useEffect(() => {
     axios
-      .get(`https://161.97.169.6:4000/product/${id}`)
+      .get(`http://161.97.169.6:4000/product/${id}`)
       .then((res) => {
         setProduct(res.data);
 
@@ -53,8 +60,6 @@ export default function Products() {
 
         setChartLegnth(cart.length);
         const stored = cart.find((item) => Number(item.id) === Number(id));
-
-        console.log("kkkkkk", res.data);
 
         if (stored) {
           setOptions({
@@ -78,9 +83,26 @@ export default function Products() {
   }, [id]);
 
   useEffect(() => {
+    GetRatings();
+  }, []);
+
+  const GetRatings = async () => {
+    try {
+      const res = await axios.get(
+        `http://161.97.169.6:4000/rating/product/${id}`
+      );
+      console.log("rating", res.data);
+      setValue(Number(res.data.average));
+      setRatingsCount(res.data.count);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
     console.log("product", product);
     console.log("options", options);
-    axios.get(`https://161.97.169.6:4000/product`).then((res) => {
+    axios.get(`http://161.97.169.6:4000/product`).then((res) => {
       console.log(" res.data", res.data);
       setReletadeProduct(
         res.data.products
@@ -127,7 +149,31 @@ export default function Products() {
     return someColor ? someColor.name : "unkown";
   }
 
-  console.log("options", options);
+  // const
+
+  const AddRatting = async () => {
+    console.log("value", value);
+    try {
+      const res = await axios.post(
+        `http://161.97.169.6:4000/rating`,
+        {
+          user_id: JSON.parse(localStorage.getItem("user")).id,
+          product_id: id,
+          value: value2,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("res", res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const ProductInfo = ({ product }) => {
     return (
       <>
@@ -138,7 +184,7 @@ export default function Products() {
               src={
                 product.images[0]?.link.includes("https")
                   ? `${product.images[0]?.link}`
-                  : `https://161.97.169.6:4000/${product.images[0]?.link}`
+                  : `http://161.97.169.6:4000/${product.images[0]?.link}`
               }
               alt="product1"
             />
@@ -249,13 +295,58 @@ export default function Products() {
 
               <div className="flex flex-col items-start w-full h-full">
                 <h1 className="font-[800] text-2xl">{product.name}</h1>
-                <div className="flex items-center gap-1 mt-1">
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-yellow-400" />
-                  <FaStar className="text-gray-300" />
-                  <span className="text-xs text-gray-500 ml-2">56890</span>
+
+                <div className="flex flex-col  gap-2 mt-2">
+                  <div className="flex flex-col ">
+                    <p className="text-gray-700 font-medium">
+                      تقييم المستخدمين:
+                    </p>
+                    <Rate disabled allowHalf defaultValue={value} />
+                    <span className="text-sm text-gray-500">
+                      {value?.toFixed(1)}
+                      <span className="text-sm text-gray-600">
+                        / number of ratings {ratingsCount}
+                      </span>
+                    </span>
+                  </div>
+
+                  {!showRate && (
+                    <button
+                      onClick={() => setShowRate(true)}
+                      className="mt-3 px-4 py-1  cursor-pointer bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                    >
+                      قيّم المنتج
+                    </button>
+                  )}
+
+                  {showRate && (
+                    <Flex gap="middle" vertical align="center" className="mt-3">
+                      <Rate
+                        tooltips={desc}
+                        onChange={setValue2}
+                        value={value2}
+                      />
+                      {value2 ? (
+                        <span className="text-sm text-gray-600">
+                          {desc[value2 - 1]}
+                        </span>
+                      ) : (
+                        <span className="text-sm text-gray-500">
+                          اختر عدد النجوم
+                        </span>
+                      )}
+
+                      <button
+                        onClick={() => {
+                          AddRatting();
+                          setShowRate(false);
+                        }}
+                        className="px-4 py-1 cursor-pointer bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+                      >
+                        إرسال التقييم
+                      </button>
+                    </Flex>
+                  )}
                 </div>
 
                 <p className="text-[#F83758] font-semibold">
@@ -342,7 +433,6 @@ export default function Products() {
                       </div>
                       <div
                         onClick={() => {
-                          //اذا الكمية أكبر من أو تساوي الستوك المتاح، منع الزيادة
                           if (options.quantity >= product.stock) {
                             alert(
                               "لا يمكن إضافة كمية أكثر من المتاح في المخزن"

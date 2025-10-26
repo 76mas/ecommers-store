@@ -11,6 +11,7 @@ import { GoArrowRight } from "react-icons/go";
 import { FaChevronRight, FaChevronLeft, FaStar } from "react-icons/fa";
 // import React, {  useState } from "react";
 import { Carousel } from "antd";
+import ProductSearch from "@/app/components/productSearch";
 
 function formatWithCommas(value) {
   if (value === null || value === undefined) return "";
@@ -29,29 +30,38 @@ const Hero = () => {
   const [allBanners, setAllBanners] = useState([]);
 
   const [allproducts, setAllProducts] = useState([]);
+
   const [comeData, setComeData] = useState(false);
   const navgation = useRouter();
+  const [showSerarch, setShowSerarch] = useState(false);
 
   useEffect(() => {
     GetData();
   }, []);
 
+  const GetProdcutsBySearch = async (trem = "") => {
+    try {
+      const products = await axios.get("http://161.97.169.6:4000/product", {
+        params: { page: 1, limit: 10, search: trem },
+      });
+
+      setAllProducts(products.data.products);
+
+      console.log("pro the data", products.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const GetData = async () => {
     try {
-      const products = await axios.get("https://161.97.169.6:4000/product", {
-        params: { page: 1, limit: 1000 },
-      });
-      const response = await axios.get("https://161.97.169.6:4000/banner");
+      const response = await axios.get("http://161.97.169.6:4000/banner");
 
       // ترتيب البنرات حسب priority
       const sortedBanners = response.data.sort(
         (a, b) => a.priority - b.priority
       );
       setAllBanners(sortedBanners.filter((item) => item.active));
-
-      console.log("pro the data", response.data);
-      console.log("pro the fff", products.data);
-      setAllProducts(products.data.products);
 
       setComeData(true);
     } catch (error) {
@@ -65,7 +75,7 @@ const Hero = () => {
     const deletBanner = async () => {
       try {
         axios
-          .delete(`https://161.97.169.6:4000/banner/${banner.id}`)
+          .delete(`http://161.97.169.6:4000/banner/${banner.id}`)
           .then((res) => {
             console.log("res", res.data);
           })
@@ -144,16 +154,10 @@ const Hero = () => {
   };
 
   const List = ({ banner }) => {
-    // let products = allproducts.filter((item) =>
-    //   banner.category_detailes.some(
-    //     (cat) => Number(item.category_id) === Number(cat.id)
-    //   )
-    // );
-
     let products = banner.map;
     products = products.slice(0, 4);
 
-    console.log("banner njjjjjjjj", banner);
+    // console.log("banner njjjjjjjj", banner);
     return (
       <div className="w-full h-auto mt-5 flex justify-center">
         <Container>
@@ -457,7 +461,7 @@ const Hero = () => {
     <div className="flex  flex-col pb-[100px] relative items-center">
       <Header />
 
-      <div className="w-full mt-32  h-[75px] flex justify-center">
+      <div className="w-full   h-[75px] flex justify-center">
         <Container>
           <div className="flex w-full text-[#BBBBBB] bg-[#fff] shadow-sm h-[55px] rounded-[12px] justify-center">
             <div className="w-full flex items-center h-full p-3">
@@ -465,6 +469,17 @@ const Hero = () => {
               <input
                 type="text"
                 placeholder="Search any Product.."
+                onChange={(e) => {
+                  // setSearch(e.target.value);
+                  // console.log(e.target.value);
+                  GetProdcutsBySearch(e.target.value);
+                  if (e.target.value !== "") {
+                    setShowSerarch(true);
+                  }
+                  if (e.target.value === "") {
+                    setShowSerarch(false);
+                  }
+                }}
                 className="w-full h-full px-4"
               />
               <MdKeyboardVoice className="text-[24px] text-[#BBBBBB]" />
@@ -473,8 +488,13 @@ const Hero = () => {
         </Container>
       </div>
 
-      {/* عرض جميع البنرات حسب الترتيب والنوع */}
-      {comeData && allBanners.map((banner) => renderBanner(banner))}
+      {showSerarch ? (
+        <Container>
+          <ProductSearch products={allproducts} />
+        </Container>
+      ) : (
+        allBanners.map((banner) => renderBanner(banner))
+      )}
     </div>
   );
 };

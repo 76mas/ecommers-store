@@ -15,11 +15,11 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get(`https://161.97.169.6:4000/product/category/${id}`)
+      .get(`http://161.97.169.6:4000/product/category/${id}`)
       .then((res) => {
         setProducts(
           res.data.filter((item) => {
-            return item.active;
+          return  item.active;
           })
         );
         console.log("res.data", res.data);
@@ -29,7 +29,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get(`https://161.97.169.6:4000/category/${id}`)
+      .get(`http://161.97.169.6:4000/category/${id}`)
       .then((res) => setCategory(res.data))
       .catch((err) => console.log(err));
   }, [id]);
@@ -65,11 +65,11 @@ export default function Products() {
                     <div className="w-full overflow-hidden rounded-xl bg-gray-100">
                       <img
                         className="w-full h-auto"
-                        // src={`https://161.97.169.6:4000/${product.images[0]?.link}`}
+                        // src={`http://161.97.169.6:4000/${product.images[0]?.link}`}
                         src={
                           product.images[0]?.link.includes("https")
                             ? `${product.images[0]?.link}`
-                            : `https://161.97.169.6:4000/${product.images[0]?.link}`
+                            : `http://161.97.169.6:4000/${product.images[0]?.link}`
                         }
                         alt={product.name || "product"}
                       />

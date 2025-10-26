@@ -71,7 +71,7 @@ const Order = () => {
     setLoading(true);
     try {
       const respose = await axios.post(
-        "https://161.97.169.6:4000/order",
+        "http://161.97.169.6:4000/order",
         finalorder,
 
         {
