@@ -70,14 +70,12 @@ export default function Home() {
           </>
         ) : (
           <>
-            {" "}
             <div className="flex min-h-[100vh] justify-center items-center w-full bg-white">
               <div className="w-full h-full flex flex-col justify-between items-center p-4">
                 <div className="flex-1 flex flex-col justify-center items-center">
                   <div className="w-full h-[250px] flex justify-center mb-6">
                     <img
                       src={Steps[step].img}
-                      // src="/imgs/steps/step1.svg"
                       alt="s1"
                       className="object-contain w-full "
                     />

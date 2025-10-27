@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 
+// import { Carousel } from "antd";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Container from "@/app/components/container";
@@ -12,6 +13,7 @@ import { FaChevronRight, FaChevronLeft, FaStar } from "react-icons/fa";
 // import React, {  useState } from "react";
 import { Carousel } from "antd";
 import ProductSearch from "@/app/components/productSearch";
+import { Spinner } from "@heroui/react";
 
 function formatWithCommas(value) {
   if (value === null || value === undefined) return "";
@@ -28,7 +30,7 @@ function formatWithCommas(value) {
 
 const Hero = () => {
   const [allBanners, setAllBanners] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const [allproducts, setAllProducts] = useState([]);
 
   const [comeData, setComeData] = useState(false);
@@ -57,12 +59,11 @@ const Hero = () => {
     try {
       const response = await axios.get("http://161.97.169.6:4000/banner");
 
-      // ترتيب البنرات حسب priority
       const sortedBanners = response.data.sort(
         (a, b) => a.priority - b.priority
       );
       setAllBanners(sortedBanners.filter((item) => item.active));
-
+      setLoading(false);
       setComeData(true);
     } catch (error) {
       console.log(error);
@@ -90,7 +91,7 @@ const Hero = () => {
     useEffect(() => {
       // if (!banner?.created_at) return;
 
-      const createdAt = new Date(banner.created_at).getTime();
+      const createdAt = new Date(banner.map[0].end_date).getTime();
       const expireAt = createdAt + 24 * 60 * 60 * 1000;
 
       const updateTimer = () => {
@@ -140,7 +141,7 @@ const Hero = () => {
 
               <button
                 onClick={() => navgation.push(`/banner/${banner.id}`)}
-                className="text-[12px] text-[#fff] flex items-center justify-center gap-2 w-[120px] h-[40px] border rounded-[10px]"
+                className="text-[12px] cursor-pointer text-[#fff] flex items-center justify-center gap-2 w-[120px] h-[40px] border rounded-[10px]"
               >
                 <p className="text-[14px]">View All</p>
                 <GoArrowRight className="text-[24px] text-[#fff]" />
@@ -175,7 +176,7 @@ const Hero = () => {
                 <div
                   onClick={() => navgation.push(`/product/${item.id}`)}
                   key={item.id}
-                  className="h-full bg-white rounded-2xl shadow-md p-2 flex flex-col"
+                  className="h-full cursor-pointer bg-white rounded-2xl shadow-md p-2 flex flex-col"
                 >
                   <div className="w-full h-[140px] flex justify-center items-center overflow-hidden rounded-xl bg-gray-100">
                     <img
@@ -401,6 +402,85 @@ const Hero = () => {
     );
   };
 
+  // const Slides = () => {
+  //   const contentStyle = {
+  //     margin: 0,
+  //     height: "160px",
+  //     color: "#fff",
+  //     borderRadius: "12px",
+  //     lineHeight: "160px",
+  //     textAlign: "center",
+  //     background: "#3ddd79",
+  //   };
+  //   const onChange = (currentSlide) => {
+  //     console.log(currentSlide);
+  //   };
+  //   return (
+  //     <Carousel
+  //       className="rounded-2xl"
+  //       style={{
+  //         borderRadius: "20px",
+  //       }}
+  //       afterChange={onChange}
+  //     >
+  //       <div>
+  //         <h3 style={contentStyle}>1</h3>
+  //       </div>
+  //       <div>
+  //         <h3 style={contentStyle}>2</h3>
+  //       </div>
+  //       <div>
+  //         <h3 style={contentStyle}>3</h3>
+  //       </div>
+  //       <div>
+  //         <h3 style={contentStyle}>4</h3>
+  //       </div>
+  //     </Carousel>
+  //   );
+  // };
+
+  const Slides = ({ banner }) => {
+    const onChange = (currentSlide) => {
+      console.log(currentSlide);
+    };
+
+    const slides = banner?.map || [];
+    return (
+      <Container>
+        {" "}
+        <Carousel
+          className="rounded-2xl"
+          style={{
+            marginTop: "10px",
+            borderRadius: "20px",
+            overflow: "hidden",
+          }}
+          afterChange={onChange}
+          autoplay
+        >
+          {slides.map((item, index) => (
+            <div>
+              <img
+                src={item.background}
+                onClick={() => navgation.push(`/banner/${item.id}`)}
+                alt="Slide 1"
+                style={{
+                  width: "100%",
+                  height: "200px",
+                  objectFit: "cover",
+                }}
+                loading={index === 0 ? "eager" : "lazy"}
+                className=" active:scale-[1.3] transition-all"
+              />
+            </div>
+          ))}
+        </Carousel>
+      </Container>
+    );
+  };
+
+  // export default Slides;
+
   const Category = ({ banner }) => {
     let categories = banner.category_detailes;
 
@@ -440,7 +520,7 @@ const Hero = () => {
         return <Category key={banner.id} banner={banner} />;
 
       case "slides":
-        return <Banner key={banner.id} banner={banner} />;
+        return <Slides key={banner.id} banner={banner} />;
 
       case "Timer":
         return <Timer key={banner.id} banner={banner} />;
@@ -488,12 +568,38 @@ const Hero = () => {
         </Container>
       </div>
 
+      {/* <Container>
+        <Slides />
+      </Container> */}
+
       {showSerarch ? (
         <Container>
           <ProductSearch products={allproducts} />
         </Container>
+      ) : loading ? (
+        <Container>
+          <div className="w-full h-[500px] overflow-hidden flex flex-col justify-center items-center gap-6 animate-pulse">
+            {/* شريط الدوائر */}
+            <div className="flex gap-3">
+              {[...Array(20)].map((_, i) => (
+                <div
+                  key={i}
+                  className="w-[50px] h-[50px] rounded-full bg-gray-300 animate-bounce"
+                  style={{ animationDelay: `${i * 0.2}s` }}
+                ></div>
+              ))}
+            </div>
+            <div className="w-[100%] h-40 bg-gray-200 rounded-xl"></div>
+
+            {/* المربع المتوسط */}
+            <div className="w-[100%] h-10 bg-gray-300 rounded-lg"></div>
+
+            <div className="w-[100%] h-40 bg-gray-200 rounded-xl"></div>
+            <div className="w-[100%] h-10 bg-gray-300 rounded-lg"></div>
+          </div>
+        </Container>
       ) : (
-        allBanners.map((banner) => renderBanner(banner))
+        <>{allBanners.map((banner) => renderBanner(banner))}</>
       )}
     </div>
   );

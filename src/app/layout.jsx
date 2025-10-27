@@ -35,11 +35,12 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
         />
       </head>
-      ;
+      
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <OrderProvider>
+          
           {children}
 
           {shouldShowFooter && <FooterNav />}

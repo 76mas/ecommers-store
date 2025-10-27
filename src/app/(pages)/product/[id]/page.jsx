@@ -12,7 +12,45 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { color } from "framer-motion";
 import { useOrder } from "@/app/context/order";
-import { Flex, Rate } from "antd";
+import { Carousel, Flex, Rate } from "antd";
+
+const Slides = ({ images }) => {
+  const onChange = (currentSlide) => {
+    console.log(currentSlide);
+  };
+
+  return (
+    <Container>
+      {" "}
+      <Carousel
+        className="rounded-2xl"
+        style={{
+          marginTop: "10px",
+          borderRadius: "20px",
+          overflow: "hidden",
+        }}
+        afterChange={onChange}
+        autoplay
+      >
+        {images?.map((item, index) => (
+          <div>
+            <img
+              key={index}
+              src={item.link}
+              alt="Slide 1"
+              style={{
+                width: "100%",
+                height: "200px",
+                objectFit: "cover",
+              }}
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </div>
+        ))}
+      </Carousel>
+    </Container>
+  );
+};
 
 function formatWithCommas(value) {
   if (value === null || value === undefined) return "";
@@ -42,8 +80,8 @@ export default function Products() {
   const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 
   const router = useRouter();
-  const [showRate, setShowRate] = useState(false); // للتحكم بظهور واجهة التقييم
-  // const averageRating = 3.8;
+  const [showRate, setShowRate] = useState(false);
+
   const [reletadeProduct, setReletadeProduct] = useState([]);
 
   const { id } = useParams();
@@ -179,15 +217,7 @@ export default function Products() {
       <>
         <div className="w-full h-full flex flex-col items-center ">
           <div className="w-full rounded-3xl h-[250px] overflow-hidden flex justify-center items-center">
-            <img
-              className="w-full"
-              src={
-                product.images[0]?.link.includes("https")
-                  ? `${product.images[0]?.link}`
-                  : `http://161.97.169.6:4000/${product.images[0]?.link}`
-              }
-              alt="product1"
-            />
+            <Slides images={product.images} />
           </div>
 
           <div className="w-full mt-5 h-full flex flex-col">
@@ -558,8 +588,36 @@ export default function Products() {
               <LuShoppingCart className="text-2xl " />
             </div>
           </div>
+          {!product ? (
+            // 🔥 شاشة اللودنك
+            <div className="w-full flex flex-col justify-center items-center gap-6 animate-pulse mt-10">
+              {/* صورة المنتج */}
+              <div className="w-full h-[250px] bg-gray-200 rounded-3xl shimmer"></div>
 
-          {product && <ProductInfo product={product} />}
+              {/* تفاصيل المنتج */}
+              <div className="w-full flex flex-col gap-4 px-2">
+                <div className="w-2/3 h-5 bg-gray-200 rounded-lg"></div>
+                <div className="w-1/2 h-5 bg-gray-200 rounded-lg"></div>
+                <div className="w-4/5 h-4 bg-gray-200 rounded-lg"></div>
+                <div className="w-full h-32 bg-gray-200 rounded-xl"></div>
+              </div>
+
+              {/* دوائر تحميل كأنها صور متعلقة */}
+              <div className="w-full flex flex-wrap justify-center gap-3 mt-6">
+                {[...Array(16)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-[50px] h-[50px]   bg-gray-300 rounded-lg animate-bounce"
+                    style={{ animationDelay: `${i * 0.2}s` }}
+                  ></div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <ProductInfo product={product} />
+          )}
+
+          {/* {product && <ProductInfo product={product} />} */}
         </Container>
       </div>
     </>
