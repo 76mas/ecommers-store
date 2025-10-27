@@ -1,7 +1,7 @@
 "use client";
 
 import Container from "@/app/components/container";
-import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronLeft, FaTimes } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { IoLocationOutline } from "react-icons/io5";
@@ -10,9 +10,10 @@ import { Button, Input, Space, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useOrder } from "@/app/context/order";
 import Order from "../order/page";
+import { RiDeleteBinFill } from "react-icons/ri";
 const Checkout = () => {
   // let orders = localStorage?.getItem("cart") || "[]";
-  const { orderDetails, setOrderDetailse } = useOrder();
+  const { orderDetails, setOrderDetailse, setChartLegnth } = useOrder();
   const [orders, setOrders] = useState([]);
 
   const [order, setOrder] = useState([]);
@@ -30,8 +31,6 @@ const Checkout = () => {
     //  const order = JSON.parse(orders);
     setOrder(JSON.parse(localStorage.getItem("cart")));
   }, []);
-
-  console.log("order", order);
 
   function handelSumPrice(orders) {
     let sum = 0;
@@ -60,7 +59,6 @@ const Checkout = () => {
         code: coupon,
         user: JSON.parse(localStorage.getItem("user")).id,
       });
-      console.log("donw data", res.data);
       // setApplay(res.data);
 
       if (handelSumPrice(order) < res.data.min_value) {
@@ -139,14 +137,26 @@ const Checkout = () => {
 
               <div className="flex flex-col border-b-1 pb-[25px] border-[#d0cece] w-full h-full  items-center gap-2">
                 {order?.map((items, index) => (
-                  <div
-                    onClick={() => {
-                      navgation.push(`/product/${items.id}`);
-                    }}
-                    className="cursor-pointer "
-                    key={index}
-                  >
-                    <div className="w-full h-[150px] flex p-3 shadow-md relative border-1 border-[#d0cece] mt-3 rounded-2xl gap-3">
+                  <div className="cursor-pointer relative " key={index}>
+                    <RiDeleteBinFill
+                      onClick={() => {
+                        order.splice(index, 1);
+                        localStorage.setItem("cart", JSON.stringify(order));
+                        setOrder(JSON.parse(localStorage.getItem("cart")));
+
+                        setChartLegnth(
+                          JSON.parse(localStorage.getItem("cart")).length
+                        );
+                      }}
+                      className="w-[40px] text-[#f00] z-30 right-2 top-7  absolute"
+                    />
+
+                    <div
+                      onClick={() => {
+                        navgation.push(`/product/${items.id}`);
+                      }}
+                      className="w-full h-[150px] flex p-3 shadow-md relative border-1 border-[#d0cece] mt-3 rounded-2xl gap-3"
+                    >
                       <div className="w-[40%] h-full rounded-2xl flex justify-center items-center overflow-hidden">
                         <img src={`${items.images?.[0]?.link}`} alt="product" />
                       </div>

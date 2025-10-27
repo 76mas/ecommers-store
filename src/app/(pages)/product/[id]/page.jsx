@@ -15,9 +15,7 @@ import { useOrder } from "@/app/context/order";
 import { Carousel, Flex, Rate } from "antd";
 
 const Slides = ({ images }) => {
-  const onChange = (currentSlide) => {
-    console.log(currentSlide);
-  };
+  const onChange = (currentSlide) => {};
 
   return (
     <Container>
@@ -115,9 +113,7 @@ export default function Products() {
           });
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [id]);
 
   useEffect(() => {
@@ -129,19 +125,13 @@ export default function Products() {
       const res = await axios.get(
         `http://161.97.169.6:4000/rating/product/${id}`
       );
-      console.log("rating", res.data);
       setValue(Number(res.data.average));
       setRatingsCount(res.data.count);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
-    console.log("product", product);
-    console.log("options", options);
     axios.get(`http://161.97.169.6:4000/product`).then((res) => {
-      console.log(" res.data", res.data);
       setReletadeProduct(
         res.data.products
 
@@ -190,7 +180,6 @@ export default function Products() {
   // const
 
   const AddRatting = async () => {
-    console.log("value", value);
     try {
       const res = await axios.post(
         `http://161.97.169.6:4000/rating`,
@@ -206,10 +195,7 @@ export default function Products() {
           },
         }
       );
-      console.log("res", res.data);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   const ProductInfo = ({ product }) => {
@@ -436,7 +422,6 @@ export default function Products() {
                               setChartLegnth(
                                 JSON.parse(localStorage.getItem("cart")).length
                               );
-                              // console.log("updatedCart", );
                             } else {
                               const updatedCart = chart.map((item) => {
                                 if (item.id === product.id) {

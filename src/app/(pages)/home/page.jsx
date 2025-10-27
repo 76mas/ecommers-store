@@ -14,6 +14,7 @@ import { FaChevronRight, FaChevronLeft, FaStar } from "react-icons/fa";
 import { Carousel } from "antd";
 import ProductSearch from "@/app/components/productSearch";
 import { Spinner } from "@heroui/react";
+import { useOrder } from "@/app/context/order";
 
 function formatWithCommas(value) {
   if (value === null || value === undefined) return "";
@@ -32,12 +33,15 @@ const Hero = () => {
   const [allBanners, setAllBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [allproducts, setAllProducts] = useState([]);
-
+  const { setChartLegnth } = useOrder();
   const [comeData, setComeData] = useState(false);
   const navgation = useRouter();
   const [showSerarch, setShowSerarch] = useState(false);
 
   useEffect(() => {
+    const chart = localStorage.getItem("cart");
+    const cart = chart ? JSON.parse(chart) : [];
+    setChartLegnth(cart.length);
     GetData();
   }, []);
 
@@ -264,143 +268,143 @@ const Hero = () => {
     );
   };
 
-  const Banner = ({ banner }) => {
-    const trackRef = useRef(null);
-    const containerRef = useRef(null);
-    const animationRef = useRef(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [startX, setStartX] = useState(0);
-    const [currentTranslate, setCurrentTranslate] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
-    const [dragOffset, setDragOffset] = useState(0);
+  // const Banner = ({ banner }) => {
+  //   const trackRef = useRef(null);
+  //   const containerRef = useRef(null);
+  //   const animationRef = useRef(null);
+  //   const [currentIndex, setCurrentIndex] = useState(0);
+  //   const [startX, setStartX] = useState(0);
+  //   const [currentTranslate, setCurrentTranslate] = useState(0);
+  //   const [isDragging, setIsDragging] = useState(false);
+  //   const [dragOffset, setDragOffset] = useState(0);
 
-    const slides = banner?.map || [];
+  //   const slides = banner?.map || [];
 
-    const getContainerWidth = useCallback(() => {
-      return containerRef.current?.offsetWidth || 0;
-    }, []);
+  //   const getContainerWidth = useCallback(() => {
+  //     return containerRef.current?.offsetWidth || 0;
+  //   }, []);
 
-    const updateTransform = useCallback((translate, animate = true) => {
-      if (!trackRef.current) return;
+  //   const updateTransform = useCallback((translate, animate = true) => {
+  //     if (!trackRef.current) return;
 
-      if (animate) {
-        trackRef.current.style.transition = "transform 500ms ease-in-out";
-      } else {
-        trackRef.current.style.transition = "none";
-      }
-      trackRef.current.style.transform = `translateX(${translate}px)`;
-    }, []);
+  //     if (animate) {
+  //       trackRef.current.style.transition = "transform 500ms ease-in-out";
+  //     } else {
+  //       trackRef.current.style.transition = "none";
+  //     }
+  //     trackRef.current.style.transform = `translateX(${translate}px)`;
+  //   }, []);
 
-    useEffect(() => {
-      const newTranslate = -currentIndex * getContainerWidth();
-      setCurrentTranslate(newTranslate);
-      updateTransform(newTranslate, true);
-    }, [currentIndex, getContainerWidth, updateTransform]);
+  //   useEffect(() => {
+  //     const newTranslate = -currentIndex * getContainerWidth();
+  //     setCurrentTranslate(newTranslate);
+  //     updateTransform(newTranslate, true);
+  //   }, [currentIndex, getContainerWidth, updateTransform]);
 
-    const touchStart = useCallback((e) => {
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      setStartX(clientX);
-      setIsDragging(true);
-      setDragOffset(0);
+  //   const touchStart = useCallback((e) => {
+  //     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  //     setStartX(clientX);
+  //     setIsDragging(true);
+  //     setDragOffset(0);
 
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    }, []);
+  //     if (animationRef.current) {
+  //       cancelAnimationFrame(animationRef.current);
+  //     }
+  //   }, []);
 
-    const touchMove = useCallback(
-      (e) => {
-        if (!isDragging) return;
+  //   const touchMove = useCallback(
+  //     (e) => {
+  //       if (!isDragging) return;
 
-        e.preventDefault();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const diff = clientX - startX;
-        setDragOffset(diff);
+  //       e.preventDefault();
+  //       const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  //       const diff = clientX - startX;
+  //       setDragOffset(diff);
 
-        animationRef.current = requestAnimationFrame(() => {
-          updateTransform(currentTranslate + diff, false);
-        });
-      },
-      [isDragging, startX, currentTranslate, updateTransform]
-    );
+  //       animationRef.current = requestAnimationFrame(() => {
+  //         updateTransform(currentTranslate + diff, false);
+  //       });
+  //     },
+  //     [isDragging, startX, currentTranslate, updateTransform]
+  //   );
 
-    const touchEnd = useCallback(() => {
-      if (!isDragging) return;
+  //   const touchEnd = useCallback(() => {
+  //     if (!isDragging) return;
 
-      setIsDragging(false);
-      const threshold = getContainerWidth() * 0.15;
+  //     setIsDragging(false);
+  //     const threshold = getContainerWidth() * 0.15;
 
-      let newIndex = currentIndex;
+  //     let newIndex = currentIndex;
 
-      if (dragOffset < -threshold && currentIndex < slides.length - 1) {
-        newIndex = currentIndex + 1;
-      } else if (dragOffset > threshold && currentIndex > 0) {
-        newIndex = currentIndex - 1;
-      }
+  //     if (dragOffset < -threshold && currentIndex < slides.length - 1) {
+  //       newIndex = currentIndex + 1;
+  //     } else if (dragOffset > threshold && currentIndex > 0) {
+  //       newIndex = currentIndex - 1;
+  //     }
 
-      setCurrentIndex(newIndex);
-    }, [
-      isDragging,
-      dragOffset,
-      currentIndex,
-      slides.length,
-      getContainerWidth,
-    ]);
+  //     setCurrentIndex(newIndex);
+  //   }, [
+  //     isDragging,
+  //     dragOffset,
+  //     currentIndex,
+  //     slides.length,
+  //     getContainerWidth,
+  //   ]);
 
-    useEffect(() => {
-      return () => {
-        if (animationRef.current) {
-          cancelAnimationFrame(animationRef.current);
-        }
-      };
-    }, []);
+  //   useEffect(() => {
+  //     return () => {
+  //       if (animationRef.current) {
+  //         cancelAnimationFrame(animationRef.current);
+  //       }
+  //     };
+  //   }, []);
 
-    if (!slides.length) return null;
+  //   if (!slides.length) return null;
 
-    return (
-      <Container>
-        <div
-          ref={containerRef}
-          className="relative shadow-xl rounded-2xl w-full h-[250px] mt-10 flex justify-center items-center overflow-hidden select-none touch-pan-y"
-          onMouseDown={touchStart}
-          onMouseMove={touchMove}
-          onMouseUp={touchEnd}
-          onMouseLeave={touchEnd}
-          onTouchStart={touchStart}
-          onTouchMove={touchMove}
-          onTouchEnd={touchEnd}
-        >
-          <div className="flex will-change-transform" ref={trackRef}>
-            {slides.map((item, index) => (
-              <div
-                key={item.id || index}
-                className="min-w-full flex flex-col relative h-[250px] rounded-2xl overflow-hidden items-center"
-              >
-                <img
-                  onClick={() => navgation.push(`/banner/${item.id}`)}
-                  className="w-full active:scale-[1.1] transition-all cursor-pointer h-full object-cover"
-                  src={item.background}
-                  alt="slide"
-                  draggable="false"
-                  loading={index === 0 ? "eager" : "lazy"}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="absolute bottom-3 flex justify-center items-center gap-2 w-full">
-            {slides.map((_, i) => (
-              <div
-                key={i}
-                className={`w-[12px] h-[12px] rounded-full transition-colors duration-300 ${
-                  i === currentIndex ? "bg-[#fea1b0]" : "bg-[#DEDBDB]"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </Container>
-    );
-  };
+  //   return (
+  //     <Container>
+  //       <div
+  //         ref={containerRef}
+  //         className="relative shadow-xl rounded-2xl w-full h-[250px] mt-10 flex justify-center items-center overflow-hidden select-none touch-pan-y"
+  //         onMouseDown={touchStart}
+  //         onMouseMove={touchMove}
+  //         onMouseUp={touchEnd}
+  //         onMouseLeave={touchEnd}
+  //         onTouchStart={touchStart}
+  //         onTouchMove={touchMove}
+  //         onTouchEnd={touchEnd}
+  //       >
+  //         <div className="flex will-change-transform" ref={trackRef}>
+  //           {slides.map((item, index) => (
+  //             <div
+  //               key={item.id || index}
+  //               className="min-w-full flex flex-col relative h-[250px] rounded-2xl overflow-hidden items-center"
+  //             >
+  //               <img
+  //                 onClick={() => navgation.push(`/banner/${item.id}`)}
+  //                 className="w-full active:scale-[1.1] transition-all cursor-pointer h-full object-cover"
+  //                 src={item.background}
+  //                 alt="slide"
+  //                 draggable="false"
+  //                 loading={index === 0 ? "eager" : "lazy"}
+  //               />
+  //             </div>
+  //           ))}
+  //         </div>
+  //         <div className="absolute bottom-3 flex justify-center items-center gap-2 w-full">
+  //           {slides.map((_, i) => (
+  //             <div
+  //               key={i}
+  //               className={`w-[12px] h-[12px] rounded-full transition-colors duration-300 ${
+  //                 i === currentIndex ? "bg-[#fea1b0]" : "bg-[#DEDBDB]"
+  //               }`}
+  //             />
+  //           ))}
+  //         </div>
+  //       </div>
+  //     </Container>
+  //   );
+  // };
 
   // const Slides = () => {
   //   const contentStyle = {
@@ -440,9 +444,7 @@ const Hero = () => {
   // };
 
   const Slides = ({ banner }) => {
-    const onChange = (currentSlide) => {
-      console.log(currentSlide);
-    };
+
 
     const slides = banner?.map || [];
     return (
@@ -455,7 +457,7 @@ const Hero = () => {
             borderRadius: "20px",
             overflow: "hidden",
           }}
-          afterChange={onChange}
+          // afterChange={onChange}
           autoplay
         >
           {slides.map((item, index) => (
@@ -478,8 +480,6 @@ const Hero = () => {
       </Container>
     );
   };
-
-  // export default Slides;
 
   const Category = ({ banner }) => {
     let categories = banner.category_detailes;
@@ -550,8 +550,7 @@ const Hero = () => {
                 type="text"
                 placeholder="Search any Product.."
                 onChange={(e) => {
-                  // setSearch(e.target.value);
-                  // console.log(e.target.value);
+       
                   GetProdcutsBySearch(e.target.value);
                   if (e.target.value !== "") {
                     setShowSerarch(true);

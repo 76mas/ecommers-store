@@ -51,22 +51,29 @@ const Order = () => {
       alert("Please fill all the fields");
       return;
     }
-    const filteredOrders = order.map((item) => ({
-      id: item.id,
-      quantity: item.quantity,
-      color: item.color,
-      size: item.size,
-    }));
+    const filteredOrders = Array.isArray(order)
+      ? order.map((item) => ({
+          id: item.id,
+          quantity: item.quantity,
+          color: item.color,
+          size: item.size,
+        }))
+      : [];
 
-    console.log(filteredOrders);
+    // console.log(filteredOrders);
 
     const finalorder = {
       user_id: JSON.parse(localStorage.getItem("user")).id,
       ...orderDetails,
-      items: [...filteredOrders],
+      items: filteredOrders,
       phone: addressInfo.phone,
       address: `${addressInfo.address} ${addressInfo.city} ${addressInfo.cuntry}`,
     };
+
+    if (finalorder?.items?.length === 0) {
+      alert("Please add items to cart");
+      return;
+    }
     console.log("finsalorder", finalorder);
     setLoading(true);
     try {
@@ -84,10 +91,8 @@ const Order = () => {
 
       console.log("reaponse", respose.data);
       setLoading(false);
-      setTimeout(() => {
-        setSentData(true);
-        navgation.push("/home");
-      }, 2000);
+
+      setSentData(true);
     } catch (error) {
       console.log(error);
     }
@@ -114,7 +119,11 @@ const Order = () => {
           </div>
           {sentData && (
             <div
-              onClick={() => setSentData(false)}
+              onClick={() => {
+                localStorage.removeItem("cart");
+                navgation.push("/home");
+                setSentData(false);
+              }}
               className="fixed inset-0 flex justify-center items-center z-50 bg-black/30"
             >
               <div className="w-[400px] h-[300px] bg-[#F2F2F2] flex flex-col  gap-10 justify-center items-center rounded-lg shadow-lg">
