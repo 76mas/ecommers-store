@@ -130,19 +130,51 @@ export default function Products() {
     } catch (err) {}
   };
 
-  useEffect(() => {
-    axios.get(`http://161.97.169.6:4000/product`).then((res) => {
-      setReletadeProduct(
-        res.data.products
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `http://161.97.169.6:4000/product/releated/product/${Number(
+  //         product?.related
+  //       )}`
+  //     )
+  //     .then((res) => {
+  //       //   setReletadeProduct(
+  //       //     res.data
 
-          .filter(
-            (item) =>
-              Number(item?.related) === Number(product?.related) &&
-              item.id !== Number(id)
-          )
-          .slice(0, 6)
-      );
-    });
+  //       //       .filter(
+  //       //         (item) =>
+  //       //           // Number(item?.related) === Number(product?.related) &&
+  //       //           item.id !== Number(id)
+  //       //       )
+  //       //       .slice(0, 6)
+  //       //   );
+
+  //       // setReletadeProduct(res.data?.filter((item) => item.id !== id));
+  //       console.log("reletadeProduct",res.data);
+  //     });
+  // }, [product]);
+  useEffect(() => {
+    if (!product?.related) return; // إذا ماكو related لا تنفذ
+
+    axios
+      .get(
+        `http://161.97.169.6:4000/product/releated/product/${Number(
+          product.related
+        )}`
+      )
+      .then((res) => {
+        // فلترة المنتجات بحيث ما يظهر المنتج نفسه
+        const filteredProducts = res.data
+          .filter((item) => item.id !== Number(product.id))
+          .slice(0, 6); // تحديد أول 6 منتجات فقط
+
+        setReletadeProduct(filteredProducts);
+
+        console.log("relatedProducts", filteredProducts);
+      })
+      .catch((err) => {
+        console.error("Error fetching related products:", err);
+      });
   }, [product]);
 
   const handleAddToCart = (currentOptions) => {
