@@ -16,7 +16,7 @@ import { Carousel, Flex, Rate } from "antd";
 
 const Slides = ({ images }) => {
   const onChange = (currentSlide) => {};
-
+  const navgation = useRouter();
   return (
     <Container>
       {" "}
@@ -441,7 +441,7 @@ export default function Products() {
                         }}
                         className="w-[50px] active:text-[#FA7189]  text-xl flex font-[100] justify-center items-center"
                       >
-                        <FaMinus className="active:text-[#FA7189]" />
+                        <FaMinus className="active:text-[#FA7189] cursor-pointer" />
                       </div>
                       <div className="w-[50px]  bg-white rounded-lg  flex justify-center items-center">
                         {options.quantity}
@@ -485,7 +485,7 @@ export default function Products() {
                         }}
                         className="w-[50px] active:text-[#FA7189] text-xl font-[100] flex justify-center items-center"
                       >
-                        <FaPlus className="active:text-[#FA7189]" />
+                        <FaPlus className="active:text-[#FA7189] cursor-pointer" />
                       </div>
                     </div>
                   </div>
@@ -499,8 +499,9 @@ export default function Products() {
 
                       setOptions(updatedOptions);
                       handleAddToCart(updatedOptions);
+                      router.push("/checkout");
                     }}
-                    className="w-[200px] text-white bg-[#F83758] h-[50px] rounded-2xl flex justify-center items-center"
+                    className="w-[200px] text-white cursor-pointer active:bg-[#FA7189] bg-[#F83758] h-[50px] rounded-2xl flex justify-center items-center"
                   >
                     <h1>Checkout</h1>
                   </div>
