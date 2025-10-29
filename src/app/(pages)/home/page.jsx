@@ -372,6 +372,9 @@ const Hero = () => {
               <input
                 type="text"
                 placeholder="Search any Product.."
+                onFocus={() => {
+                  navgation.push("search");
+                }}
                 onChange={(e) => {
                   GetProdcutsBySearch(e.target.value);
                   if (e.target.value !== "") {

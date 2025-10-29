@@ -13,6 +13,7 @@ import axios from "axios";
 import { color } from "framer-motion";
 import { useOrder } from "@/app/context/order";
 import { Carousel, Flex, Rate } from "antd";
+import WishlistSwitch from "@/app/components/wishlistComp";
 
 const Slides = ({ images }) => {
   const onChange = (currentSlide) => {};
@@ -240,18 +241,29 @@ export default function Products() {
 
           <div className="w-full mt-5 h-full flex flex-col">
             <div className="w-full gap-3 h-full flex flex-col items-start justify-center">
-              {product.options[0] && product.options[0]?.color?.length > 0 && (
-                <h1 className="font-[800] text-[#FA7189] text-xl">
-                  color:{" "}
-                  <span className=" text-[#000]">
-                    {getColorName(options.color)}
-                  </span>
-                </h1>
-              )}
+              <div className="w-full gap-3 h-full flex flex items-start justify-between">
+                <div className="w-full gap-3 h-full flex flex-col items-start justify-center">
+                  {product.options[0] &&
+                    product.options[0]?.color?.length > 0 && (
+                      <h1 className="font-[800] text-[#FA7189] text-xl">
+                        color:{" "}
+                        <span className="text-[#000]">
+                          {getColorName(options.color)}
+                        </span>
+                      </h1>
+                    )}
 
-              {product.options[0] && product.options[0]?.size?.length > 0 && (
-                <h1 className="font-[800] text-xl">size: {options.size}</h1>
-              )}
+                  {product.options[0] &&
+                    product.options[0]?.size?.length > 0 && (
+                      <h1 className="font-[800] text-xl">
+                        size: {options.size}
+                      </h1>
+                    )}
+                </div>
+
+                {/* 🔽 زر المفضلة (سويتش) */}
+                <WishlistSwitch product={product} />
+              </div>
 
               <div className="flex flex-col gap-1.5">
                 <div className="flex gap-1">
