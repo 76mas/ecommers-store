@@ -11,7 +11,7 @@ import { MdKeyboardVoice, MdOutlineTimer } from "react-icons/md";
 import { GoArrowRight } from "react-icons/go";
 import { FaChevronRight, FaChevronLeft, FaStar } from "react-icons/fa";
 // import React, {  useState } from "react";
-import { Carousel } from "antd";
+import { Carousel, Rate } from "antd";
 import ProductSearch from "@/app/components/productSearch";
 import { Spinner } from "@heroui/react";
 import { useOrder } from "@/app/context/order";
@@ -181,11 +181,11 @@ const Hero = () => {
                 <div
                   onClick={() => navgation.push(`/product/${item.id}`)}
                   key={item.id}
-                  className="h-full active:scale-95 cursor-pointer bg-white rounded-2xl shadow-md p-2 flex flex-col"
+                  className="h-full active:scale-95 min-w-[150px] w-[300px] cursor-pointer bg-white rounded-2xl shadow-md p-2 flex flex-col"
                 >
                   <div className="w-full h-[140px] flex justify-center items-center overflow-hidden rounded-xl bg-gray-100">
                     <img
-                      className="w-full"
+                      className="w-full h-full object-cover"
                       src={`${item.images[0]?.link}`}
                       alt="product"
                     />
@@ -199,26 +199,39 @@ const Hero = () => {
                     <p className="text-[#F83758] font-semibold">
                       {formatWithCommas(item.endprice)}
                       {/* ${item.price * 0.4} */}
+                      <br />
                       <span className="text-gray-400 line-through">
                         {formatWithCommas(item.price)}
                         {/* ${item.price} */}
                       </span>{" "}
-                      <span className="text-green-600">
-                        {/* {item.price / item.endprice}% */}
+                      {/* <span className="text-green-600">
                         {((item.price - item.endprice) / item.price).toFixed(
                           2
                         ) * 100}
                         %
+                      </span> */}
+                      <span className="text-green-600">
+                        {(
+                          ((item.price - item.endprice) / item.price) *
+                          100
+                        ).toFixed(1)}
+                        %
                       </span>
                     </p>
 
-                    <div className="flex items-center gap-1 mt-1">
+                    <div className="flex w-full items-center gap-1 mt-1">
+                      {/* <FaStar className="text-yellow-400" />
                       <FaStar className="text-yellow-400" />
                       <FaStar className="text-yellow-400" />
                       <FaStar className="text-yellow-400" />
-                      <FaStar className="text-yellow-400" />
-                      <FaStar className="text-gray-300" />
-                      <span className="text-xs text-gray-500 ml-2">56890</span>
+                      <FaStar className="text-gray-300" /> */}
+                      <Rate
+                        disabled
+                        allowHalf
+                        defaultValue={item.average_rating}
+                        style={{ fontSize: 12 }}
+                      />
+                      {/* <span className="text-xs text-gray-500 ml-2">56890</span> */}
                     </div>
                   </div>
                 </div>
