@@ -7,7 +7,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 
-
 export default function Products() {
   const { id } = useParams();
   const [products, setProducts] = useState([]);
@@ -42,7 +41,7 @@ export default function Products() {
           <div className="w-full h-[75px] flex justify-center items-center">
             <div className="w-full relative justify-center items-center flex">
               <FaChevronLeft
-                onClick={() => navgation.push("/home")}
+                onClick={() => navgation.back()}
                 className="absolute active:text-[#ddd] text-2xl left-0 cursor-pointer"
               />
               <div className="flex justify-center items-center text-2xl font-semibold">

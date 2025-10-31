@@ -34,6 +34,7 @@ const SearchPage = () => {
 
       const fetched = response.data.products || [];
 
+      console.log("pro the data", response.data);
       if (pageNum === 1) {
         setAllProducts(fetched);
       } else {

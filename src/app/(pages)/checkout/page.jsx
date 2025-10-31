@@ -97,7 +97,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="w-full h-full pb-[80px] flex flex-col items-center">
+    <div className="w-full relative h-full flex flex-col items-center">
       {go ? (
         <>
           <div className="w-full h-[75px] border-b-1 border-[#d0cece] flex justify-center items-center">
@@ -105,7 +105,7 @@ const Checkout = () => {
               <div className="w-full h-full relative justify-center items-center flex">
                 <FaChevronLeft
                   onClick={() => {
-                    navgation.push("/home");
+                    navgation.back();
                   }}
                   className=" absolute text-2xl left-0 "
                 />
@@ -284,7 +284,7 @@ const Checkout = () => {
               </div>
             </div>
           </Container>
-          <div className="w-full  bottom-0 h-[100px] border-1 border-[#d0cece] bg-[#F8F8F8] rounded-t-2xl flex  justify-center items-center">
+          <div className="w-full fixed bottom-0 h-[100px] border-1 border-[#d0cece] bg-[#F8F8F8] rounded-t-2xl flex  justify-center items-center">
             <Container>
               <div className="w-full h-full flex items-center justify-between">
                 <div className="w-[40%] h-full flex flex-col justify-center items-start">

@@ -162,6 +162,7 @@ const Hero = () => {
     let products = banner.map;
     products = products.slice(0, 4);
 
+    console.log("List", banner);
     // console.log("banner njjjjjjjj", banner);
     return (
       <div className="w-full h-auto mt-5 flex justify-center">
@@ -310,25 +311,32 @@ const Hero = () => {
     categories = categories.filter((item) => item.active);
 
     return (
-      <div className="w-full h-[75px] mt-2 overflow-hidden flex justify-center">
+      <div className="w-full   overflow-hidden  items-center flex justify-center">
         <Container>
-          <div className="flex pl-42 w-full overflow-x-scroll h-full no-scrollbar justify-center gap-[20px] items-center">
+          <div className="flex w-full overflow-x-scroll no-scrollbar gap-4 items-center px-2 snap-x snap-mandatory">
             {categories
               .sort((a, b) => a.priority - b.priority)
               .map((item) => (
                 <div
                   key={item.id}
                   onClick={() => navgation.push(`/category/${item.id}`)}
-                  className="w-[56px] active:scale-95 active:text-[#FA7189] text-[#000] cursor-pointer h-[65px] flex flex-col items-center"
+                  className="flex-shrink-0 pt-3 snap-center cursor-pointer group"
                 >
-                  <div className="w-[50px] shadow-sm h-[50px] rounded-full flex justify-center items-center">
-                    <img
-                      className="w-full h-full rounded-full"
-                      src={`${item.image}`}
-                      alt={item.name}
-                    />
+                  <div className="flex flex-col items-center gap-2 transition-transform duration-200 active:scale-95">
+                    <div className="relative w-16 h-16">
+                      <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-400 to-pink-500 rounded-full opacity-0 group-active:opacity-100 transition-opacity duration-200 blur-sm"></div>
+                      <div className="relative w-full h-full rounded-full border-2 border-transparent group-active:border-pink-400 transition-all duration-200 p-0.5 bg-gradient-to-br from-gray-100 to-white shadow-md">
+                        <img
+                          className="w-full h-full rounded-full object-cover"
+                          src={`${item.image}`}
+                          alt={item.name}
+                        />
+                      </div>
+                    </div>
+                    <p className="text-xs font-medium text-gray-800 group-active:text-pink-500 transition-colors duration-200 max-w-[70px] text-center truncate">
+                      {item.name}
+                    </p>
                   </div>
-                  <p className="text-[12px]">{item.name}</p>
                 </div>
               ))}
           </div>
@@ -336,6 +344,38 @@ const Hero = () => {
       </div>
     );
   };
+  // const Category = ({ banner }) => {
+  //   let categories = banner.category_detailes;
+
+  //   categories = categories.filter((item) => item.active);
+
+  //   return (
+  //     <div className="w-full h-[75px] mt-2 overflow-hidden flex justify-center">
+  //       <Container>
+  //         <div className="flex pl-42 w-full overflow-x-scroll h-full no-scrollbar justify-center gap-[20px] items-center">
+  //           {categories
+  //             .sort((a, b) => a.priority - b.priority)
+  //             .map((item) => (
+  //               <div
+  //                 key={item.id}
+  //                 onClick={() => navgation.push(`/category/${item.id}`)}
+  //                 className="w-[56px] active:scale-95 active:text-[#FA7189] text-[#000] cursor-pointer h-[65px] flex flex-col items-center"
+  //               >
+  //                 <div className="w-[50px] shadow-sm h-[50px] rounded-full flex justify-center items-center">
+  //                   <img
+  //                     className="w-full h-full rounded-full"
+  //                     src={`${item.image}`}
+  //                     alt={item.name}
+  //                   />
+  //                 </div>
+  //                 <p className="text-[12px]">{item.name}</p>
+  //               </div>
+  //             ))}
+  //         </div>
+  //       </Container>
+  //     </div>
+  //   );
+  // };
 
   const renderBanner = (banner) => {
     switch (banner.type) {
@@ -391,10 +431,6 @@ const Hero = () => {
           </div>
         </Container>
       </div>
-
-      {/* <Container>
-        <Slides />
-      </Container> */}
 
       {showSerarch ? (
         <Container>

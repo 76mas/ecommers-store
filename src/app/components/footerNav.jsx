@@ -36,7 +36,7 @@ export default function FooterNav() {
   return (
     <div
       style={{ zIndex: 9900 }}
-      className="w-full fixed bottom-0 h-[85px] bg-[#ffffff] border-t border-[#d0cece] flex items-center justify-center"
+      className="w-full fixed bottom-0 h-[85px] bg-[#ffffff] border-t px-4 border-[#d0cece] flex items-center justify-center"
     >
       <Container>
         <div className="flex w-full h-full items-center justify-between gap-9">

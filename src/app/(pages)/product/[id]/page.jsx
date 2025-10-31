@@ -90,7 +90,7 @@ export default function Products() {
       .get(`http://161.97.169.6:4000/product/${id}`)
       .then((res) => {
         setProduct(res.data);
-
+        console.log("res", res.data);
         const chart = localStorage.getItem("cart");
 
         const cart = chart ? JSON.parse(chart) : [];
@@ -127,6 +127,7 @@ export default function Products() {
         `http://161.97.169.6:4000/rating/product/${id}`
       );
       setValue(Number(res.data.average));
+
       setRatingsCount(res.data.count);
     } catch (err) {}
   };
@@ -241,7 +242,7 @@ export default function Products() {
 
           <div className="w-full mt-5 h-full flex flex-col">
             <div className="w-full gap-3 h-full flex flex-col items-start justify-center">
-              <div className="w-full gap-3 h-full flex flex items-start justify-between">
+              <div className="w-full gap-3 h-full flex  items-start justify-between">
                 <div className="w-full gap-3 h-full flex flex-col items-start justify-center">
                   {product.options[0] &&
                     product.options[0]?.color?.length > 0 && (
@@ -606,7 +607,8 @@ export default function Products() {
         <Container>
           <div className="flex  w-full h-[75px] justify-between items-center">
             <div
-              onClick={() => router.push("/home")}
+              // onClick={() => router.push("/home")}
+              onClick={() => router.back()}
               className=" w-[50px] cursor-pointer h-[50px] rounded-full flex justify-center items-center"
             >
               <FaChevronLeft className="text-2xl active:text-[#FA7189] " />
