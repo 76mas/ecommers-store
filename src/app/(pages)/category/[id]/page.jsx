@@ -17,7 +17,7 @@ export default function Products() {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`https://161.97.169.6:4000/product/category/${id}`)
+      .get(`https://mahmod.puretik.info/api/product/category/${id}`)
       .then((res) => {
         const activeProducts = res.data.filter((item) => item.active);
         setProducts(activeProducts);
@@ -28,7 +28,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get(`https://161.97.169.6:4000/category/${id}`)
+      .get(`https://mahmod.puretik.info/api/category/${id}`)
       .then((res) => setCategory(res.data))
       .catch((err) => console.log(err));
   }, [id]);
@@ -91,7 +91,7 @@ export default function Products() {
                           src={
                             product.images[0]?.link?.includes("httpss")
                               ? product.images[0]?.link
-                              : `https://161.97.169.6:4000/${product.images[0]?.link}`
+                              : `https://mahmod.puretik.info/api/${product.images[0]?.link}`
                           }
                           alt={product.name || "product"}
                         />

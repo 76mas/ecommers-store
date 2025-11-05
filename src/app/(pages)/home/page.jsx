@@ -47,7 +47,7 @@ const Hero = () => {
 
   const GetProdcutsBySearch = async (trem = "") => {
     try {
-      const products = await axios.get("https://161.97.169.6:4000/product", {
+      const products = await axios.get("https://mahmod.puretik.info/api/product", {
         params: { page: 1, limit: 10, search: trem },
       });
 
@@ -61,7 +61,7 @@ const Hero = () => {
 
   const GetData = async () => {
     try {
-      const response = await axios.get("https://161.97.169.6:4000/banner");
+      const response = await axios.get("https://mahmod.puretik.info/api/banner");
 
       const sortedBanners = response.data.sort(
         (a, b) => a.priority - b.priority
@@ -80,7 +80,7 @@ const Hero = () => {
     const deletBanner = async () => {
       try {
         axios
-          .delete(`https://161.97.169.6:4000/banner/${banner.id}`)
+          .delete(`https://mahmod.puretik.info/api/banner/${banner.id}`)
           .then((res) => {
             console.log("res", res.data);
           })

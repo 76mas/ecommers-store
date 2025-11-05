@@ -28,7 +28,7 @@ const SearchPage = () => {
     try {
       setLoading(true);
 
-      const response = await axios.get("https://161.97.169.6:4000/product", {
+      const response = await axios.get("https://mahmod.puretik.info/api/product", {
         params: { page: pageNum, limit: 10, search: term },
       });
 

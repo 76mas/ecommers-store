@@ -87,7 +87,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get(`https://161.97.169.6:4000/product/${id}`)
+      .get(`https://mahmod.puretik.info/api/product/${id}`)
       .then((res) => {
         setProduct(res.data);
         console.log("res", res.data);
@@ -124,7 +124,7 @@ export default function Products() {
   const GetRatings = async () => {
     try {
       const res = await axios.get(
-        `https://161.97.169.6:4000/rating/product/${id}`
+        `https://mahmod.puretik.info/api/rating/product/${id}`
       );
       setValue(Number(res.data.average));
 
@@ -135,7 +135,7 @@ export default function Products() {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `https://161.97.169.6:4000/product/releated/product/${Number(
+  //       `https://mahmod.puretik.info/api/product/releated/product/${Number(
   //         product?.related
   //       )}`
   //     )
@@ -160,7 +160,7 @@ export default function Products() {
 
     axios
       .get(
-        `https://161.97.169.6:4000/product/releated/product/${Number(
+        `https://mahmod.puretik.info/api/product/releated/product/${Number(
           product.related
         )}`
       )
@@ -216,7 +216,7 @@ export default function Products() {
   const AddRatting = async () => {
     try {
       const res = await axios.post(
-        `https://161.97.169.6:4000/rating`,
+        `https://mahmod.puretik.info/api/rating`,
         {
           user_id: JSON.parse(localStorage.getItem("user")).id,
           product_id: id,

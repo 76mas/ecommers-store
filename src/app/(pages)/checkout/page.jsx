@@ -55,7 +55,7 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post(`https://161.97.169.6:4000/voucher/check`, {
+      const res = await axios.post(`https://mahmod.puretik.info/api/voucher/check`, {
         code: coupon,
         user: JSON.parse(localStorage.getItem("user")).id,
       });
