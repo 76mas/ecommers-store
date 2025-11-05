@@ -29,7 +29,7 @@ export default function Login() {
     };
     try {
       const response = await axios.post(
-        "http://161.97.169.6:4000/user/login",
+        "https://161.97.169.6:4000/user/login",
         postData
       );
       console.log(response.data);
@@ -62,7 +62,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "http://161.97.169.6:4000/user/register",
+        "https://161.97.169.6:4000/user/register",
         postData
       );
       console.log(response.data);

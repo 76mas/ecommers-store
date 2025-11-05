@@ -66,7 +66,7 @@ const Order = () => {
     // setOrderDetailse({ ...orderDetails, ...finalorder });
     try {
       const respose = await axios.post(
-        "http://161.97.169.6:4000/order",
+        "https://161.97.169.6:4000/order",
         finalorder,
 
         {

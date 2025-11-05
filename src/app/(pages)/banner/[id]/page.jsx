@@ -21,7 +21,7 @@ export default function ProductsBanner() {
   const fetchBanner = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://161.97.169.6:4000/banner/${id}`);
+      const res = await axios.get(`https://161.97.169.6:4000/banner/${id}`);
       setBanner(res.data);
       setProducts(res.data.map);
       if (res.data.type === "Timer") {
@@ -89,9 +89,9 @@ export default function ProductsBanner() {
                         <img
                           className="w-full h-auto object-cover"
                           src={
-                            product.images[0]?.link?.includes("https")
+                            product.images[0]?.link?.includes("httpss")
                               ? product.images[0]?.link
-                              : `http://161.97.169.6:4000/${product.images[0]?.link}`
+                              : `https://161.97.169.6:4000/${product.images[0]?.link}`
                           }
                           alt={product.name || "product"}
                         />

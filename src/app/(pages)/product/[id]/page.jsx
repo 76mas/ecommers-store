@@ -87,7 +87,7 @@ export default function Products() {
 
   useEffect(() => {
     axios
-      .get(`http://161.97.169.6:4000/product/${id}`)
+      .get(`https://161.97.169.6:4000/product/${id}`)
       .then((res) => {
         setProduct(res.data);
         console.log("res", res.data);
@@ -124,7 +124,7 @@ export default function Products() {
   const GetRatings = async () => {
     try {
       const res = await axios.get(
-        `http://161.97.169.6:4000/rating/product/${id}`
+        `https://161.97.169.6:4000/rating/product/${id}`
       );
       setValue(Number(res.data.average));
 
@@ -135,7 +135,7 @@ export default function Products() {
   // useEffect(() => {
   //   axios
   //     .get(
-  //       `http://161.97.169.6:4000/product/releated/product/${Number(
+  //       `https://161.97.169.6:4000/product/releated/product/${Number(
   //         product?.related
   //       )}`
   //     )
@@ -160,7 +160,7 @@ export default function Products() {
 
     axios
       .get(
-        `http://161.97.169.6:4000/product/releated/product/${Number(
+        `https://161.97.169.6:4000/product/releated/product/${Number(
           product.related
         )}`
       )
@@ -216,7 +216,7 @@ export default function Products() {
   const AddRatting = async () => {
     try {
       const res = await axios.post(
-        `http://161.97.169.6:4000/rating`,
+        `https://161.97.169.6:4000/rating`,
         {
           user_id: JSON.parse(localStorage.getItem("user")).id,
           product_id: id,
