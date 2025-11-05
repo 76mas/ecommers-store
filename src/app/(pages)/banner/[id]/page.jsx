@@ -21,7 +21,9 @@ export default function ProductsBanner() {
   const fetchBanner = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`https://mahmod.puretik.info/api/banner/${id}`);
+      const res = await axios.get(
+        `https://mahmod.puretik.info/api/banner/${id}`
+      );
       setBanner(res.data);
       setProducts(res.data.map);
       if (res.data.type === "Timer") {
@@ -88,11 +90,7 @@ export default function ProductsBanner() {
                       <div className="w-full overflow-hidden rounded-xl bg-gray-100">
                         <img
                           className="w-full h-auto object-cover"
-                          src={
-                            product.images[0]?.link?.includes("httpss")
-                              ? product.images[0]?.link
-                              : `https://mahmod.puretik.info/api/${product.images[0]?.link}`
-                          }
+                          src={product.images[0]?.link}
                           alt={product.name || "product"}
                         />
                       </div>
